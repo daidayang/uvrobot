@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<title> Remote Driving </title>
+
+	<style>
+	  .btnBlue {background-color: #008CBA;} /* Blue */
+	  .btnGray {background-color: #e7e7e7;} /* Gray */
+	</style>
+
+
+</head>
+
+<body>
+
+<div> <!-- LEDs -->
+<h2>Remote driving</h2>
+<p>Here you can drive the robot remotely. </p>
+
+<table>
+<tr>
+<td>
+<input type="button" id="speed1"  value="Speed 1">
+</td>
+<td>
+<input type="button" id="speed2"  value="Speed 2">
+</td>
+<td>
+<input type="button" id="speed3"  value="Speed 3">
+</td>
+</tr>
+<tr>
+<td><input type="button" id="lighton"  value="Light On"></td>
+<td><input type="button" id="fogon"  value="Fogger On"></td>
+<td><input type="button" id="rptvlton"  value="Rpt BATT On"></td>
+</tr>
+
+<tr>
+<td><input type="button" id="lightoff"  value="Light Off"></td>
+<td><input type="button" id="fogoff" value="Fogger Off"></td>
+<td><input type="button" id="rptvltoff" value="Rpt BATT Off"></td>
+</tr>
+
+<tr>
+<td><input type="button" id="btnmotor"  value="Reset Motor"></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+</td>
+<td align="center">
+<input type="button" id="d_forward"  value="Forward">
+</td>
+<td>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<input type="button" id="d_left" value="Left">
+</td>
+<td align="center">
+<input type="button" id="d_stop" value="Stop">
+</td>
+<td align="center">
+<input type="button" id="d_right" value="Right">
+</td>
+</tr>
+
+<tr>
+<td>
+</td>
+<td align="center">
+<input type="button" id="d_back" value="Back" >
+<td>
+</td>
+</tr>
+
+</table>
+</div>
+<hr>
+Websocket status:
+<br>
+<div id="ws-status"> Waiting... </div>
+
+<!-- Scripts -->
+<script src="jquery.min.js"></script>
+<script src="ws-client.js"></script>
+
+    <script>
+        let textBox = document.getElementById('message');
+
+        document.addEventListener('keydown', (event) => {
+            console.log(`KEYDOWN: key=${event.key},code=${event.code}`);
+        });
+
+        document.addEventListener('keyup', (event) => {
+            console.log(`KEYUP: key=${event.key},code=${event.code}`);
+        });
+    </script>
+</body>
+
+</html>
