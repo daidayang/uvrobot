@@ -1,0 +1,11 @@
+<launch>
+    <arg name="debug_flag" default="1"/>
+    <arg name="pub_topic_name" default="task"/>
+    <arg name="time_interval" default="30"/> <!-- in minute/单位为分钟-->
+
+    <node pkg="wsserver" type="simple_repeat" name="simple_repeat1" output="screen">
+        <param name="debug_flag" value="$(arg debug_flag)"/>
+        <param name="pub_topic_name" value="$(arg pub_topic_name)"/>
+        <param name="time_interval" value="$(arg time_interval)"/>
+    </node>
+</launch>

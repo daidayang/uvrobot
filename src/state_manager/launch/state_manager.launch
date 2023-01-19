@@ -1,0 +1,19 @@
+<launch>
+    <arg name="debug_flag" default="1"/>
+    <arg name="battery_topic_name" default="battery_state"/>
+    <arg name="task_topic_name" default="task_state"/>
+    <arg name="uvrobot_state_topic" default="UVRobot_state"/>
+    <arg name="critical_error_topic_name" default="critical_error_state"/>
+    <arg name="uvrobot_operation_topic" default="/op_det_result"/>
+    <arg name="navigation_switch_topic_name" default="/start"/>
+
+    <node pkg="state_manager" type="state_manager" name="state_manager1" output="screen">
+        <param name="debug_flag" value="$(arg debug_flag)"/>
+        <param name="battery_topic_name" value="$(arg battery_topic_name)"/>
+        <param name="task_topic_name" value="$(arg task_topic_name)"/>
+        <param name="critical_error_topic_name" value="$(arg critical_error_topic_name)"/>
+        <param name="uvrobot_state_topic" value="$(arg uvrobot_state_topic)"/>
+        <param name="uvrobot_operation_topic" value="$(arg uvrobot_operation_topic)"/>
+        <param name="navigation_switch_topic_name" value="$(arg navigation_switch_topic_name)"/>
+    </node>
+</launch>

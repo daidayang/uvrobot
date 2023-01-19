@@ -1,0 +1,20 @@
+<launch>
+
+    <node name="odometry_driver" pkg="odometry_driver" type="odometry_driver" output="screen">
+        <param name="header_type" value="$"/>
+        <param name="wheel_gauge" value="0.6"/>
+        <param name="time_name" value="gpstime"/>
+        <param name="port" value="/dev/ttyUSB0"/>
+        <param name="baud_rate" value="9600"/>
+        <param name="frame_id" value="/odom"/>
+        
+        <!--odometry calculation parameter -->
+        <!--轮间距-->
+        <param name="wheel_track" value="0.52"/>
+        <!--车轮直径-->
+        <param name="wheel_diameter" value="0.255"/>
+        <!--车轮一圈编码数,即车轮旋转一圈编码器的脉冲数-->
+        <param name="circle_enc" value="30000"/>
+
+    </node>
+</launch>

@@ -1,0 +1,94 @@
+<!-- 
+    ROS navigation stack with velocity smoother and safety (reactive) controller
+-->
+<launch>
+  
+  <arg name="odom_frame_id"   default="odom"/>
+  <arg name="base_frame_id"   default="base_footprint"/>
+  <!--arg name="base_frame_id"   default="base_link"/-->
+  <arg name="global_frame_id" default="map"/>
+
+  <arg name="hardware_topic" default="x_box"/>
+
+  <arg name="odom_topic" default="camera/odom/sample" />
+  <arg name="laser_topic" default="scan" />
+
+  <arg name="custom_param_file" default="$(find move_base)/param/dummy.yaml"/>
+ 
+  <arg name="goal_list_file" default="$(env HOME)/uvrobot/testfiles/current_goal_list.csv"/>
+
+  <arg name="charging_path_file" default="$(env HOME)/uvrobot/testfiles/current_charging_path.csv"/>
+
+  
+  <arg name="auto_start" default="true"/>
+
+  <arg name="simulation_mode" default="true"/>
+
+  <!--在目标点给定的距离内，角速度平滑处理所需角速度个数/-->
+  <arg name="count_for_average_angle_velocity" default="10"/>
+
+  <!--在目标点给定的距离内，使用距离比例换算法调整角速度,即距离越小，角速度越小/-->
+  <arg name="enable_adjustment_angle_velocity_by_distance" default="false"/>
+
+
+  <!--在robot到达目标点给定的距离内，先让robot停下来,然后调整robot方向，直冲目标点，然后向目标点移动/-->
+  <arg name="enable_stop_and_rotation_action" default="true"/>
+  
+  <arg name="stop_and_rotation_distance" default="0.4"/>
+
+  <arg name="stop_and_rotation_angle_tolerance" default="0.01"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="log">
+    <rosparam file="$(find move_base)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find move_base)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
+    <rosparam file="$(find move_base)/param/local_costmap_params.yaml" command="load" />   
+    <rosparam file="$(find move_base)/param/global_costmap_params.yaml" command="load" />
+    
+    
+    <rosparam file="$(find move_base)/param/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find move_base)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find move_base)/param/global_planner_params.yaml" command="load" />
+    <rosparam file="$(find move_base)/param/navfn_global_planner_params.yaml" command="load" />
+    <!-- external params file that could be loaded into the move_base namespace -->
+    <rosparam file="$(arg custom_param_file)" command="load" />
+    
+    <!-- reset frame_id parameters using user input data -->
+    <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+    <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+    
+    <!--param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/-->
+    <param name="local_costmap/global_frame" value="$(arg global_frame_id)"/>
+    <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+    
+    <!--param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/-->
+    <param name="DWAPlannerROS/global_frame_id" value="$(arg global_frame_id)"/>
+
+    <param name="DWAPlannerROS/count_for_average_angle_velocity" value="$(arg count_for_average_angle_velocity)"/>
+
+    <param name="DWAPlannerROS/enable_adjustment_angle_velocity_by_distance" value="$(arg enable_adjustment_angle_velocity_by_distance)"/>
+
+    <param name="DWAPlannerROS/enable_stop_and_rotation_action" value="$(arg enable_stop_and_rotation_action)"/>
+    <param name="DWAPlannerROS/stop_and_rotation_distance" value="$(arg stop_and_rotation_distance)"/>
+  
+    <param name="DWAPlannerROS/stop_and_rotation_angle_tolerance" value="$(arg stop_and_rotation_angle_tolerance)"/>
+
+    <param name="goal_list_setting" value="$(arg goal_list_file)"/>
+    
+    <param name="charging_path_file" value="$(arg charging_path_file)"/>
+
+    <param name="auto_start" value="$(arg auto_start)"/>
+
+    <param name="hardware_topic" value="$(arg hardware_topic)"/>
+
+    <param name="simulation_mode" value="$(arg simulation_mode)"/>
+
+    <remap from="cmd_vel" to="navigation_velocity_smoother/raw_cmd_vel"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="scan" to="$(arg laser_topic)"/>
+    
+  </node>
+ 
+  <node pkg="move_base" type="path_marker_publisher" name="path_publish"  output = "log"/>
+  <node pkg="move_base" type="display_coordinate_system" name="display_coordinate"  output = "log"/>
+</launch>
+ 

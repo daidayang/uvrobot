@@ -1,0 +1,19 @@
+<launch>
+    <arg name="debug_flag" default="1"/>
+    <arg name="cmd_vel_sub_topic_name" default="/move_base/cmd_vel"/>
+    <arg name="robot_pose_topic_name" default="/robot_pose"/>
+    <arg name="op_det_pub_topic_name" default="/operation_det_result"/>
+    <arg name="fast_op_det_pub_topic_name" default="/fast_operation_det_result"/>
+    <arg name="threshold_decision" default="0.02"/>
+    <arg name="span_time" default="10"/>
+
+    <node pkg="operation_detection" type="operation_detection" name="op_det1" output="screen">
+        <param name="debug_flag" value="$(arg debug_flag)"/>
+        <param name="cmd_vel_sub_topic_name" value="$(arg cmd_vel_sub_topic_name)"/>
+        <param name="robot_pose_topic_name" value="$(arg robot_pose_topic_name)"/>
+        <param name="op_det_pub_topic_name" value="$(arg op_det_pub_topic_name)"/>
+        <param name="threshold_decision" value="$(arg threshold_decision)"/>
+        <param name="span_time" value="$(arg span_time)"/>
+        <param name="fast_op_det_pub_topic_name" value="$(arg fast_op_det_pub_topic_name)"/>
+    </node>
+</launch>

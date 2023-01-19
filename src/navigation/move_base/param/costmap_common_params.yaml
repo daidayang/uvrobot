@@ -1,0 +1,64 @@
+max_obstacle_height: 0.9 #0.60  # assume something like an arm is mounted on top of the robot
+
+
+# Obstacle Cost Shaping (http://wiki.ros.org/costmap_2d/hydro/inflation)
+#robot_radius: 0.40  # distance a circular robot should be clear of the obstacle (kobuki: 0.18)
+#如果机器人不是圆形的那就需要使用footprint这个参数，该参数是一个列表，其中的每一个坐标代表机器人上的一点，设置机器人的中心为[0,0]，根据机器人不同的形状，找到机器人各凸出的坐标点即可
+#即将多边形所有顶点都列到其中。就完成了robot的footprint。
+footprint: [[0.14, 0.14],[0.14, -0.14],[-0.14, -0.14],[-0.14, 0.14]]  # if the robot is not circular #机器人为矩形，设置机器的在坐标系内所占用的面积
+
+map_type: voxel
+
+obstacle_layer:
+  enabled:              true
+  max_obstacle_height:  0.9 #0.6
+  origin_z:             0.0
+  z_resolution:         0.2
+  z_voxels:             3
+  unknown_threshold:    15
+  mark_threshold:       0
+  combination_method:   1
+  track_unknown_space:  true #true needed for disabling global path planning through unknown space
+  obstacle_range: 2.5 #最大障碍物检测范围(用来设置机器人检测障碍物的最大范围)
+  raytrace_range: 3.0 #检测自由空间的最大范围(用来设置机器人检测自由空间的最大范围)
+  origin_z: 0.0
+  z_resolution: 0.2
+  z_voxels: 2
+  publish_voxel_map: false
+  observation_sources:  scan bump
+  scan:
+    data_type: LaserScan
+    topic: scan
+    marking: true
+    clearing: true
+    min_obstacle_height: 0.0   #0.1
+    max_obstacle_height: 0.55
+  bump:
+    data_type: LaserScan #PointCloud2
+    topic: scan #mobile_base/sensors/bumper_pointcloud
+    marking: true
+    clearing: false
+    min_obstacle_height: 0.0   #0.1
+    max_obstacle_height: 0.55
+  # for debugging only, let's you see the entire voxel grid
+
+#cost_scaling_factor and inflation_radius were now moved to the inflation_layer ns
+inflation_layer:
+  enabled:              true
+
+  #膨胀过程中应用到代价值的比例因子，代价地图中到实际障碍物距离在内切圆半径到膨胀半径之间的所有cell可以使用如下公式来计算膨胀代价：
+  #exp(-1.0 * cost_scaling_factor * (distance_from_obstacle - inscribed_radius)) * (costmap_2d::INSCRIBED_INFLATED_OBSTACLE - 1),
+  #公式中costmap_2d::INSCRIBED_INFLATED_OBSTACLE目前指定为254，注意： 由于在公式中cost_scaling_factor被乘了一个负数，所以增大比例因子反而会降低代价
+
+  cost_scaling_factor:  1.0  #5.0  # exponential rate at which the obstacle cost drops off (default: 10)
+  #膨胀半径，膨胀层会把障碍物代价膨胀直到该半径为止
+  inflation_radius:     0.15  # max. distance from an obstacle at which costs are incurred for planning paths.
+  #//机器人与障碍物保持的最小距离，inflation_radius:膨胀半径，膨胀层会把障碍物代价膨胀直到该半径为止，一般将该值设置为机器人底盘的直径大小。
+  #在这里，我们设置机器人的占用面积或机器人的半径是圆形。在指定占地面积的情况下，假设机器人的中心处于（0.0,0.0），并且支持顺时针和逆时针规格。
+  #我们还将设定代价地图的膨胀半径。膨胀半径应设定为在代价地图的与障碍物保持安全的最大距离。例如，将膨胀半径设定为0.55米，
+  #意味着机器人针对相同的障碍物获取的所有路径都保持距离障碍物0.55米或更远。如果你的机器人不能很好地通过窄门或其它狭窄的地方，则稍微减小这个值，相反地，如果机器人不断地撞到东西，则尝试增大这个值。
+
+static_layer:
+  enabled:              true
+  
+

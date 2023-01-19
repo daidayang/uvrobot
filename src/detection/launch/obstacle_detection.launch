@@ -1,0 +1,27 @@
+<launch>
+    <arg name="debug_flag" default="1"/>
+    <arg name="costmap_topic" default="/move_base/global_costmap/costmap"/>
+    <arg name="robot_pose_topic" default="/robot_pose"/>
+    <arg name="detection_res_topic" default="/obstacle_detection"/>
+    <arg name="uvrobot_radius" default="0.4"/>    <!-- 单位米 -->
+    <arg name="map_resolution" default="0.05"/> <!-- 地图默认分辨率，每个像素代表多少米 -->
+    <arg name="basic_map" default="/home/lor/map_autopatrol/costmap_test/testfiles_map/current.pgm"/>
+    <arg name="origin_x" default="-4.70019"/>
+    <arg name="origin_y" default="-4.93542"/>
+    <arg name="map_w" default="168"/>
+    <arg name="map_h" default="136"/>
+
+    <node pkg="obstacle_detection" type="obstacle_detection" name="obstacle_detection1" output="screen">
+        <param name="costmap_topic" value="$(arg costmap_topic)"/>
+        <param name="debug_flag" value="$(arg debug_flag)"/>
+        <param name="basic_map" value="$(arg basic_map)"/>
+        <param name="detection_res_topic" value="$(arg detection_res_topic)"/>
+        <param name="robot_pose_topic" value="$(arg robot_pose_topic)"/>
+        <param name="uvrobot_radius" value="$(arg uvrobot_radius)"/>
+        <param name="map_resolution" value="$(arg map_resolution)"/>
+        <param name="origin_x" value="$(arg origin_x)"/>
+        <param name="origin_y" value="$(arg origin_y)"/>
+        <param name="map_w" value="$(arg map_w)"/>
+        <param name="map_h" value="$(arg map_h)"/>
+    </node>
+</launch>

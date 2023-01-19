@@ -1,0 +1,4 @@
+<launch>
+  <!-- Move base -->
+  <include file="$(find move_base)/launch/move_base.launch.xml"/>
+</launch>

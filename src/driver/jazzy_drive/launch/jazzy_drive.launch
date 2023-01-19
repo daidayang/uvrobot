@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find rplidar_ros)/launch/rplidar.launch" />
+
+  <node pkg="jazzy_drive" type="jazzy_drive" name="jazzy_drive_node" output="screen">
+          <param name="port" value="/dev/ttyACM0" />
+  </node>
+</launch>

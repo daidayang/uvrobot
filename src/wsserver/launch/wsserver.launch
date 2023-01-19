@@ -1,0 +1,36 @@
+<launch>
+    <arg name="ws_port" default="9002"/>
+    <arg name="debug_flag" default="1"/>
+    <arg name="robot_position_topic_name" default="robot_pose"/>
+    <arg name="remote_control_topic_name" default="cmd_vel"/>
+    <arg name="patrol_status_topic_name" default="task_status_report"/> <!--返回巡逻任务状态-->
+    <arg name="clean_task_topic_name" default="task"/>  <!--下发巡逻任务给Robot-->
+    <arg name="report_status_url" default="http://localhost:8080/taskstatus"/>
+    <!--地图文件的宽和高单位为像素-->
+    <arg name="map_width" default="152"/>   
+    <arg name="map_height" default="150"/>
+    <!--地图坐标远点的单位为米-->
+    <arg name="map_origin_x" default="-4.69597"/>
+    <arg name="map_origin_y" default="-5.64262"/>
+    <arg name="map_resolution" default="0.05"/>
+    <!--选择相机类型-->
+    <arg name="csi_or_usb" default="1"/>   <!--1：使用USB相机；0：使用CSI(树莓派)相机-->
+    <arg name="cam_id" default="0"/>        <!--只在使用USB相机时起作用-->
+
+    <node pkg="wsserver" type="wsserver" name="wsserver_1" output="screen">
+        <param name="ws_port" value="$(arg ws_port)"/>
+        <param name="debug_flag" value="$(arg debug_flag)"/>
+        <param name="robot_position_topic_name" value="$(arg robot_position_topic_name)"/>
+        <param name="remote_control_topic_name" value="$(arg remote_control_topic_name)"/>
+        <param name="patrol_status_topic_name" value="$(arg patrol_status_topic_name)"/>
+        <param name="report_status_url" value="$(arg report_status_url)"/>
+        <param name="clean_task_topic_name" value="$(arg clean_task_topic_name)"/>
+        <param name="map_width" value="$(arg map_width)"/>
+        <param name="map_height" value="$(arg map_height)"/>
+        <param name="map_origin_x" value="$(arg map_origin_x)"/>
+        <param name="map_origin_y" value="$(arg map_origin_y)"/>
+        <param name="map_resolution" value="$(arg map_resolution)"/>
+        <param name="csi_or_usb" value="$(arg csi_or_usb)"/>
+        <param name="cam_id" value="$(arg cam_id)"/>
+    </node>
+</launch>

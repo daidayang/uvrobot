@@ -1,0 +1,21 @@
+local_costmap:
+   global_frame: map #在局部代价地图中的全局坐标系，一般需要设置为odom_frame，但是由于stdr没有这个坐标系，我就拿/map_static来代替了;
+   robot_base_frame: /base_footprint #// 机器人本体的基坐标系;
+   update_frequency: 5.0 #局部代价地图的更新频率;
+   #//代价地图以参数update_frequency 指定的周期进行地图更新。每个周期传感器数据进来后，都要在代价地图底层占用结构上执行标记和清除障碍操作，
+   #并且这种结构会被投影到代价地图附上相应代价值。 这完成之后，对代价赋值为costmap_2d::LETHAL_OBSTACLE的每个cell执行障碍物的膨胀操作，
+   #即从每个占用cell向外传播代价值，直到用户定义的膨胀半径为止。
+   publish_frequency: 2.0 #“publish_frequency”参数确定代价地图发布可视化信息的速率（以Hz为单位）。局部代价地图的发布频率;
+
+   static_map: false #局部代价地图一般不设置为静态地图，因为需要检测是否在机器人附近有新增的动态障碍物;
+   rolling_window: true #将“rolling_window”参数设置为true意味着当机器人移动时，保持机器人在本地代价地图中心。,使用滚动窗口，始终保持机器人在当前局部地图的中心位置;
+   width: 4.0  #width:滚动窗口的宽度，单位是米;
+   height: 4.0 #height:滚动窗口的高度，单位是米;
+   resolution: 0.05 #// 地图的分辨率，该分辨率可以从加载的地图相对应的配置文件中获取到;
+   #“宽度”，“高度”和“分辨率”参数设置本地代价地图（滑动地图）的宽度（米），高度（米）和分辨率（米/单元格）。请注意，这个网格的分辨率与静态地图的分辨率不同，但大多数时候我们倾向设置为相同值。
+   transform_tolerance: 0.5 #//局部代价地图中的坐标系之间转换的最大可忍受延时;
+   #为了把来自传感器源的数据插入到代价地图，costmap_2d::Costmap2DROS要大量使用tf。所有tf转换由global_frame parameter，the robot_base_frame parameter，以及sensor sources建立联系和更新。The transform_tolerance parameter定义了tf转换所能容忍的的最大延时。如果 tf 树没有以期望速度被更新，那么导航功能包集将会让机器人停止
+
+   plugins:
+    - {name: obstacle_layer,      type: "costmap_2d::VoxelLayer"}
+    - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}

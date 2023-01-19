@@ -1,0 +1,6 @@
+<!---->
+<launch>
+
+  <node pkg="move_base" type="filter_scan_data" name="filter_scan_data"  output = "screen"/>
+
+</launch>

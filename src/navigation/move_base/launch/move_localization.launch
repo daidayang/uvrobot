@@ -1,0 +1,16 @@
+<launch>
+  <!-- Map server -->
+  <!--arg name="map_file" default="$(env HOME)/Desktop/robot/20200720/2020-07-20-07-31-58_map.yaml"/-->
+  <!--arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/-->  <!-- r200, kinect, asus_xtion_pro -->
+  <arg name="map_file" default="$(env HOME)/uvrobot/testfiles/current.yaml"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" output = "log"/>
+
+  <!-- Localization >
+  </include-->
+
+  <include file="$(find cartographer_ros)/launch/move_demo_backpack_2d_localization.launch"/>
+
+  <!-- TF -->
+  <include file="$(find move_base)/launch/robot_tf.launch"/>
+</launch>
