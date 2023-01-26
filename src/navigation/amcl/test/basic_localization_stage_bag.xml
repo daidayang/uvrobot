@@ -1,0 +1,7 @@
+<!-- setting pose: 47.943 21.421 -0.503
+setting pose: 30.329 34.644 3.142 
+117.5s -->
+<launch>
+    <node name="rosbag" pkg="rosbag" type="play" 
+        args="-d 10 -r 1 --clock --hz 10 $(find amcl)/test/basic_localization_stage_indexed.bag"/>
+</launch>

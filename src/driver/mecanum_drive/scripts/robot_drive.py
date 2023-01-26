@@ -96,15 +96,19 @@ def twist_callback(data):
     print('Data from /twist_raw received')
 
 
-def xbox_callback(data):
-      
-    # print the actual message in its raw format
-    rospy.loginfo("Here's what was subscribed: %s", data.data)
-      
-    # otherwise simply print a convenient message on the terminal
-    print('Data from /topic_name received')
+def xbox_callback(msg):
 
-  
+    if msg.data[0] == 'D':
+        forward = int(msg.data[2:4], 16)
+        angle = int(msg.data[4:6], 16)
+
+        UART_Send_Twist(2.5 * ( forward - 128 ) / 128, 0, 0)
+
+        rospy.loginfo("XBOX Drive: %i:%i", forward, angle)
+
+    if msg.data[0] == 'C':
+        rospy.loginfo("XBOX Control: %s", msg.data)
+        
 def main():
       
     # initialize a node by the name 'listener'.

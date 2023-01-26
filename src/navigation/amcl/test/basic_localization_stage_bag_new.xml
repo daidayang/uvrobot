@@ -1,0 +1,7 @@
+<!-- setting pose: 47.943 21.421 -0.503
+setting pose: 30.329 34.644 3.142 
+117.5s -->
+<launch>
+    <node name="rosbag" pkg="rosbag" type="play" 
+        args="-d 15 --clock --hz 10  /home/huafy/Desktop/robot/20200709/2020-07-09-18-02-43.bag"/> <!-- $(find amcl)/test/2020-07-04_dayang_1.bag -->
+</launch>
