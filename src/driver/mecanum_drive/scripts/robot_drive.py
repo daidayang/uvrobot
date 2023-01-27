@@ -102,9 +102,9 @@ def xbox_callback(msg):
         forward = int(msg.data[2:4], 16)
         angle = int(msg.data[4:6], 16)
 
-        UART_Send_Twist(2.5 * ( forward - 128 ) / 128, 0, 0)
+        UART_Send_Twist(3.5 * ( forward - 128 ) / 128, 0, 50.0 * (128-angle)/128)
 
-        rospy.loginfo("XBOX Drive: %i:%i", forward, angle)
+        rospy.loginfo("XBOX Drive: %f:%f", 3.5 * ( forward - 128 ) / 128, 50.0 * (128-angle)/128)
 
     if msg.data[0] == 'C':
         rospy.loginfo("XBOX Control: %s", msg.data)
@@ -114,7 +114,7 @@ def main():
     # initialize a node by the name 'listener'.
     # you may choose to name it however you like,
     # since you don't have to use it ahead
-    rospy.init_node('mecanum_drive', anonymous=True)
+    rospy.init_node('mecanum_drive')
 
     rospy.Subscriber("xbox", String, xbox_callback)
     rospy.Subscriber("twist_raw", Twist, twist_callback)
