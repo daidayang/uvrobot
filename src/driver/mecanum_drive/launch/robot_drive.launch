@@ -1,4 +1,4 @@
 <launch>
-  <node name="robot_drive" pkg="mecanum_drive" type="robot_drive.py" output="log">
+  <node name="robot_drive" pkg="mecanum_drive" type="robot_drive.py" output="screen">
   </node>
 </launch>

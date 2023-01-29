@@ -12,6 +12,8 @@ DISTANCE_FRONT_TO_REAR_WHEEL = 0.115    # in meter
 WHEEL_SEPARATION_WIDTH  = DISTANCE_LEFT_TO_RIGHT_WHEEL / 2
 WHEEL_SEPARATION_LENGTH = DISTANCE_FRONT_TO_REAR_WHEEL / 2
 
+serial_buffer = ""
+
 serial_port = serial.Serial (
     port="/dev/ttyTHS1",
     baudrate=115200,
@@ -19,6 +21,8 @@ serial_port = serial.Serial (
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE )
 
+# Create publisher
+pub_robotrx = rospy.Publisher("robot_rx", String, queue_size=1)
 
 def UART_Send_STOP():
     UART_Send_LRFB(0, 0, 0, 0)
@@ -77,19 +81,23 @@ def UART_Send_Twist(linear_x, linear_y, angular_z):
 
 # Define Timer callback
 def TIMER_callback(event):
+    global serial_buffer
 
     if serial_port.inWaiting() > 0:
         data = serial_port.read()
-        print(data)
-        serial_port.write(data)
         # if we get a carriage return, add a line feed too
         # \r is a carriage return; \n is a line feed
-        # This is to help the tty program on the other end 
+        # This is to help the tty program on the other end
         # Windows is \r\n for carriage return, line feed
         # Macintosh and Linux use \n
-        if data == "\r".encode():
-            # For Windows boxen on the other end
-            serial_port.write("\n".encode())
+
+        if data == "\n".encode() or data == "\r".encode():
+            if len(serial_buffer) > 0:
+                pub_robotrx.publish(serial_buffer)
+                rospy.loginfo(serial_buffer)
+            serial_buffer = ""
+        else:
+            serial_buffer += data
 
 
 def twist_callback(data):
@@ -108,9 +116,9 @@ def xbox_callback(msg):
 
     if msg.data[0] == 'C':
         rospy.loginfo("XBOX Control: %s", msg.data)
-        
+
 def main():
-      
+
     # initialize a node by the name 'listener'.
     # you may choose to name it however you like,
     # since you don't have to use it ahead
@@ -119,14 +127,8 @@ def main():
     rospy.Subscriber("xbox", String, xbox_callback)
     rospy.Subscriber("twist_raw", Twist, twist_callback)
 
-    # Create publisher
-    publisher = rospy.Publisher("~topic",String,queue_size=1)
-
-    # apdriverx_pub_ = nh_.advertise<std_msgs::String>("ApDrvRx", 1);
-    # apdrivetx_pub_ = nh_.advertise<std_msgs::String>("ApDrvTx", 1);
-
     # Read parameter
-    pub_period = rospy.get_param("~pub_period",1.0)
+    pub_period = rospy.get_param("~pub_period",0.05)
 
     # Create timer
     rospy.Timer(rospy.Duration.from_sec(pub_period), TIMER_callback)
@@ -134,9 +136,9 @@ def main():
     # spin() simply keeps python from
     # exiting until this node is stopped
     rospy.spin()
-  
+
 if __name__ == '__main__':
-      
+
     # you could name this function
     try:
         main()
