@@ -11,17 +11,26 @@
 
 $(document).ready(function(){
 
-//        var WEBSOCKET_ROUTE = "/ws";
+//      var WEBSOCKET_ROUTE = "/ws";
         var WEBSOCKET_ROUTE = "";
+
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	var host = urlParams.get('host')
+	if ( host == null || host == '' )
+	    host = window.location.hostname;
+
+//	console.log("host");
+//	console.log(host);
 
         if(window.location.protocol == "http:"){
             //localhost
-            var ws = new WebSocket("ws://" + window.location.hostname + ":9090" + WEBSOCKET_ROUTE);
-            }
+            var ws = new WebSocket("ws://" + host + ":9090" + WEBSOCKET_ROUTE);
+        }
         else if(window.location.protocol == "https:"){
             //Dataplicity
-            var ws = new WebSocket("wss://" + window.location.hostname + ":9090" + WEBSOCKET_ROUTE);
-            }
+            var ws = new WebSocket("wss://" + host + ":9090" + WEBSOCKET_ROUTE);
+        }
 
         var myVar = setInterval(function() {
            if ( sndCmdCnt > 0 ) {
