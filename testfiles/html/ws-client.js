@@ -23,13 +23,13 @@ $(document).ready(function(){
 //	console.log("host");
 //	console.log(host);
 
-        if(window.location.protocol == "http:"){
-            //localhost
-            var ws = new WebSocket("ws://" + host + ":9090" + WEBSOCKET_ROUTE);
-        }
-        else if(window.location.protocol == "https:"){
+        if(window.location.protocol == "https:"){
             //Dataplicity
             var ws = new WebSocket("wss://" + host + ":9090" + WEBSOCKET_ROUTE);
+        }
+	else {
+            //localhost
+            var ws = new WebSocket("ws://" + host + ":9090" + WEBSOCKET_ROUTE);
         }
 
         var myVar = setInterval(function() {
