@@ -1,5 +1,3 @@
-
-
 <launch>
 <node name="cartographer_pbstream_to_ros_map" pkg="cartographer_ros"
       type="cartographer_pbstream_to_ros_map" args="
