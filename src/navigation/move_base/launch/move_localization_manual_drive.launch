@@ -1,13 +1,9 @@
 <launch>
-
-  <!-- Map server -->
-  <!--arg name="map_file" default="$(env HOME)/Desktop/robot/20200720/2020-07-20-07-31-58_map.yaml"/-->
-
-
   <param name="/use_sim_time" value="false" />
 
-  <param name="robot_description" textfile="$(find cartographer_ros)/urdf/backpack_2d.urdf" />
+  <param name="robot_description" textfile="$(find move_base)/param/mecanum_robot.urdf" />
 
+  <arg name="map_file" default="$(env HOME)/uvrobot/testfiles/current.yaml"/>
   <arg name="load_state_filename" default="$(env HOME)/uvrobot/testfiles/current.pbstream"/>
 
   <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
@@ -17,6 +13,8 @@
       <param name="inverted"            type="bool"   value="false"/>
       <param name="angle_compensate"    type="bool"   value="true"/>
   </node>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" output = "log"/>
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
@@ -37,5 +35,9 @@
 
   <node name="robot_drive" pkg="mecanum_drive" type="robot_drive.py" />
 
+  <!-- TF -->
+  <include file="$(find move_base)/launch/robot_tf.launch"/>
+
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 </launch>
+
