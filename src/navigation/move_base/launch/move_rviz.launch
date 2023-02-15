@@ -1,6 +1,6 @@
 <launch>
 
   <node name="rviz" pkg="rviz" type="rviz" required="true"
-      args="-d $(find cartographer_ros)/configuration_files/uvrobot_test.rviz" />
+      args="-d $(find move_base)/param/move_demo_2d.rviz" />
 
 </launch>
